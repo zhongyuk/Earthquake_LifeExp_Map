@@ -1,5 +1,6 @@
 package module6;
 
+import java.util.HashMap;
 import java.util.List;
 
 import processing.core.PConstants;
@@ -22,13 +23,16 @@ public class CountryMarker extends SimplePolygonMarker {
 	//constructor
 	private String countryName;
 	private String countryID;
+	private int transparency;
 	public CountryMarker(){
 		super();
 	}
-	public CountryMarker(Feature country){
+	public CountryMarker(Feature country, HashMap<String, Float> lifeExpMap){
 		super(((ShapeFeature)country).getLocations(),((ShapeFeature)country).getProperties());
 		countryName = this.getStringProperty("name");
 		countryID = this.getId();
+		//Set transparency based on life expectancy;
+		this.setTransparency(lifeExpMap);
 	}
 	public CountryMarker(Feature country, String name, String ID){
 		super(((ShapeFeature)country).getLocations(),((ShapeFeature)country).getProperties());
@@ -45,13 +49,26 @@ public class CountryMarker extends SimplePolygonMarker {
 	public String getID(){
 		return countryID;
 	}
+	public void setTransparency(HashMap<String, Float> lifeExpMap){
+		if(lifeExpMap.containsKey(getID())){
+			transparency = (int)(lifeExpMap.get(getID())*5)-280;
+		}
+		else{
+			transparency = -1;
+		}
+	} 
 	
 	public void draw(PGraphics pg, List<MapPosition> mapPositions){
 		if (selected){
 			pg.pushStyle();
 			pg.strokeWeight(2);
 			pg.stroke(0, 0, 0);
-			pg.fill(255, 0, 0, 77);
+			if(transparency==-1){
+				pg.fill(75, 75, 75,125);
+			}
+			else{
+				pg.fill(255, 0, 0, transparency);
+			}
 			pg.beginShape();
 			for (MapPosition mapPosition : mapPositions) {
 				pg.vertex(mapPosition.x, mapPosition.y);

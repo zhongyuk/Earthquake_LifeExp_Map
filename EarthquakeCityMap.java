@@ -93,6 +93,9 @@ public class EarthquakeCityMap extends PApplet {
 		earthquakesURL = "quiz2.atom";
 		
 		// (2) Reading in earthquake data and geometric properties
+		// STEP 4: EXTENSION
+	    lifeExpMap = ParseFeed.loadLifeExpectancyFromCSV(this,"LifeExpectancyWorldBank.csv");
+	    
 	    //     STEP 1: load country features and markers
 		List<Feature> countries = GeoJSONReader.loadData(this, "countries.geo.json");
 		//countryMarkers = MapUtils.createSimpleMarkers(countries);
@@ -100,18 +103,20 @@ public class EarthquakeCityMap extends PApplet {
 		for(Feature country : countries){
 			//SimplePolygonMarker
 			if (country.getType().toString().equals("POLYGON")){
-				countryMarkers.add(new CountryMarker(country));
+				countryMarkers.add(new CountryMarker(country, lifeExpMap));
 			}
 			//MultiMarker
 			else{
 				CountryMultiMarker countryMultiMarkers = new CountryMultiMarker(country);
 				List<Marker> cms = countryMultiMarkers.getMarkers();
 				for(Marker cm : cms){
+					((CountryMarker)cm).setTransparency(lifeExpMap);
 					countryMarkers.add((CountryMarker)cm);
 				}
 			}
 		}
 		//countryMarkers = MapUtils.createSimpleMarkers(countries);
+		
 		
 		//     STEP 2: read in city data
 		List<Feature> cities = GeoJSONReader.loadData(this, cityFile);
@@ -139,8 +144,6 @@ public class EarthquakeCityMap extends PApplet {
 	    //printQuakes();
 	    sortAndPrint(15);
 	    
-	   // STEP 4: EXTENSION
-	    lifeExpMap = ParseFeed.loadLifeExpectancyFromCSV(this,"LifeExpectancyWorldBank.csv");
 	 		
 	    // (3) Add markers to map
 	    //     NOTE: Country markers are not added to the map.  They are used
