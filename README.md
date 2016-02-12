@@ -12,6 +12,6 @@ There are three pieces of java codes in this repo.
 
 ### Functionalities
 Compared to the original packages, adding the three pieces of codes in this repo will add some new functionalities to the EarthquakeCityMap GUI.
-* When hovering over a continent area, the country of where the mouse is hovering over will be highlighed with red border and the area will be shadowed in transparent red color.
+* When hovering over a continent area, the country of where the mouse is hovering over will be highlighed with black solid line to highlight the border; and the area will be shadowed in transparent color. The level of transparency is depending on the life expectancy data provided by world bank: 1) if the life expenctancy of this country is high, the shadowing color will be red and stronger; 2) if the life expectancy if this country is low, the shadowing color will be red and lighter; 3) if the life expectancy data of this country is not available in the dataset, the shadowing color will be gray.
 * When hovering over a continent area, the name of the country which is being hovered over will be printed out on the right legend area.
 * When hovering over a continent area, the life expentancy of a country which is being hovered over will be printed out on the right legend area if it is available in the world bank data; if not available, "not available" string will be printed out on the legend area.
